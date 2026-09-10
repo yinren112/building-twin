@@ -1,8 +1,8 @@
-# 来霖 · 智慧楼宇 | LAILIN Building Twin
+# 云庭中心 · 智慧楼宇数字孪生系统 | Building Twin
 
 云庭中心 · 基于纯原生 WebGL 的零依赖自包含 3D 数字孪生楼宇系统。
 
-![来霖智慧楼宇首页](docs/assets/cover.png)
+![智慧楼宇数字孪生系统首页](docs/assets/cover.png)
 
 ## 作品定位与系统概览
 

@@ -2,8 +2,8 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#e8eeeb"><meta name="description" content="来霖 · 智慧楼宇数字孪生运维。零依赖 WebGL 2 实时交互案例，包含建筑总览、楼层拆解、设备定位与模拟告警工单。">
-<title>来霖 · 智慧楼宇 | LAILIN Building Twin</title>
+<meta name="theme-color" content="#e8eeeb"><meta name="description" content="云庭中心 · 智慧楼宇数字孪生系统。基于原生 WebGL 2 的轻量级交互示范案例，包含空间总览、楼层立体拆解、设备定位与告警工单联动。">
+<title>云庭中心 · 智慧楼宇数字孪生系统 | 3D Building Twin</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%2323453f'/%3E%3Cpath d='M16 22 32 13 48 22 48 42 32 51 16 42Z M16 22 32 32 48 22 M32 32 32 51' fill='none' stroke='%23d7e8bd' stroke-width='3'/%3E%3C/svg%3E">
 <style>
 :root{--bg:#e8eeeb;--panel:rgba(249,251,248,.91);--white:#fbfcfa;--ink:#233f3a;--muted:#81918b;--line:rgba(47,79,66,.11);--green:#4c806d;--lime:#dce8c9;--orange:#c17f52;--orange-bg:#f6ece0;--shadow:0 12px 40px rgba(35,67,48,.045);--r:18px;font-family:Inter,"Segoe UI","PingFang SC","Microsoft YaHei","Noto Sans CJK SC",sans-serif;color:var(--ink);font-synthesis:none}
@@ -71,9 +71,9 @@ body{color:var(--ink)}
 </head>
 <body>
 <header class="header" id="header">
- <a class="brand" href="#" aria-label="返回楼宇总览"><span class="brand-mark" data-icon="building"></span><span><strong>来霖 · 智慧楼宇</strong><small>LAILIN BUILDING TWIN</small></span></a>
- <div class="header-project"><span class="tiny-square"></span> 云庭中心 <span class="divider">/</span><b>A 座</b></div>
- <div class="header-actions"><button id="quality-toggle" class="quality-toggle" title="切换精细 / 流畅画质" aria-label="画质：精细" aria-pressed="true">精细画质</button><span class="live-badge"><i></i>演示数据<span class="local-text"> · 本地运行</span></span><button id="capture" class="icon-button" title="导出当前 3D 场景 PNG" aria-label="导出场景截图" data-icon="capture"></button><button id="presentation" class="icon-button" title="作品模式 · P" aria-label="切换作品模式" data-icon="expand"></button></div>
+ <a class="brand" href="#" aria-label="返回楼宇总览"><span class="brand-mark" data-icon="building"></span><span><strong>智慧楼宇数字孪生</strong><small>BUILDING DIGITAL TWIN</small></span></a>
+ <div class="header-project"><span class="tiny-square"></span> 云庭中心 <span class="divider">/</span><b>A 座 · 示范工程</b></div>
+ <div class="header-actions"><button id="quality-toggle" class="quality-toggle" title="切换精细 / 流畅画质" aria-label="画质：精细" aria-pressed="true">精细画质</button><span class="live-badge"><i></i>项目示范案例<span class="local-text"> · 本地实时渲染</span></span><button id="capture" class="icon-button" title="导出当前 3D 场景 PNG" aria-label="导出场景截图" data-icon="capture"></button><button id="presentation" class="icon-button" title="作品模式 · P" aria-label="切换作品模式" data-icon="expand"></button></div>
 </header>
 <main>
  <section class="stats" aria-label="楼宇运维统计">
@@ -110,7 +110,7 @@ body{color:var(--ink)}
 <div id="error" class="error-screen" hidden><span data-icon="building"></span><h1>三维场景未能启动</h1><p id="error-text"></p><p>建议使用桌面版 Chrome 或 Edge，并在设置中启用图形加速。</p><button onclick="location.reload()">重新加载</button></div>
 <button id="exit-presentation" title="退出作品模式 · P">退出作品模式 <kbd>P</kbd></button>
 <script>
-/* LAILIN Twin — compact, dependency-free column-major 3D math. */
+/* Building Twin — compact, dependency-free column-major 3D math. */
 'use strict';
 window.Twin = window.Twin || {};
 Twin.math = (() => {
@@ -148,7 +148,7 @@ Twin.math = (() => {
   return {inverse,add,sub,dot,cross,norm,identity,mul,compose,lookAt,ortho,transform,clamp,lerp,color,random};
 })();
 
-/* LAILIN architectural renderer v2. Zero dependencies / WebGL 2.
+/* Architectural WebGL 2 renderer v2. Zero dependencies / WebGL 2.
  * Instanced geometry, analytic material reflection, filtered directional shadows,
  * normal/depth G-buffer, world-space contact AO, and edge-aware antialiasing.
  * No image backgrounds, generated screenshots, CDN, or hidden external assets.
@@ -491,7 +491,7 @@ Twin.buildModel = function(){
  }
  for(const xx of [-.45,.45])for(const zz of [-.46,.46])cyl([xx,.017,zz],[.055,.04,.055],P.metal);
  })}
- function sign(text,p,size=1,mat=P.brass){const paths={L:[[0,1,0,0],[0,0,.58,0]],A:[[0,0,.3,1],[.3,1,.6,0],[.14,.42,.46,.42]],I:[[.25,0,.25,1]],N:[[0,0,0,1],[0,1,.6,0],[.6,0,.6,1]],T:[[0,1,.6,1],[.3,1,.3,0]]};at(p,0,()=>{let x=0;for(const letter of text){for(const [x1,y1,x2,y2] of paths[letter]||[]){const dx=x2-x1,dy=y2-y1;box([(x+(x1+x2)/2)*size,(y1+y2)/2*size,0],[Math.hypot(dx,dy)*size,.065*size,.04*size],mat,[0,0,Math.atan2(dy,dx)])}x+=.88}})}
+ function sign(text,p,size=1,mat=P.brass){const paths={L:[[0,1,0,0],[0,0,.58,0]],A:[[0,0,.3,1],[.3,1,.6,0],[.14,.42,.46,.42]],I:[[.25,0,.25,1]],N:[[0,0,0,1],[0,1,.6,0],[.6,0,.6,1]],T:[[0,1,.6,1],[.3,1,.3,0]],C:[[.58,1,0,1],[0,1,0,0],[0,0,.58,0]],E:[[0,0,0,1],[0,1,.55,1],[0,.5,.38,.5],[0,0,.55,0]],R:[[0,0,0,1],[0,1,.55,1],[.55,1,.55,.52],[.55,.52,0,.52],[.18,.52,.55,0]]};at(p,0,()=>{let x=0;for(const letter of text){for(const [x1,y1,x2,y2] of paths[letter]||[]){const dx=x2-x1,dy=y2-y1;box([(x+(x1+x2)/2)*size,(y1+y2)/2*size,0],[Math.hypot(dx,dy)*size,.065*size,.04*size],mat,[0,0,Math.atan2(dy,dx)])}x+=.88}})}
  // Architectural plinth, streetscape, entrance and landscape.
  set(-4,'ground');box([0,-.9,0],[900,.2,900],material('#e8eeeb',1,0,0,8));
  set(-1,'site');round([0,-.15,0],[51,.95,40],P.stone);round([0,.31,0],[50.5,.10,39.5],P.floor);
@@ -599,7 +599,7 @@ Twin.buildModel = function(){
   for(const x of [-7.4,-6.2,-5.0]){round([x,1.02,-6.35],[.62,.19,.49],P.white);round([x,1.113,-6.34],[.43,.018,.33],P.edge);cyl([x,1.11,-6.59],[.021,.27,.021],P.metal);pipe([x,1.24,-6.59],[x,1.24,-6.43],.021,P.metal)}
   if(f===0){
    round([1.8,.70,-1.2],[5.2,1.04,1.45],P.ivory);box([1.8,.70,-.457],[4.9,.85,.034],P.wood);box([1.8,1.26,-1.2],[5.2,.08,1.45],P.white);box([1.8,1.17,-.43],[4.7,.025,.02],P.brass);at([0,.315,0],0,()=>monitor(2.8,-1.25,Math.PI));chair(2.8,-2.83,0);
-   box([1.9,1.65,-3.9],[7.0,2.9,.2],P.wood);for(let i=0;i<35;i++)box([-1.5+i*.2,1.65,-3.74],[.05,2.9,.09],P.brass);sign('LAILIN',[-.5,1.8,-3.65],.70,P.ivory);
+   box([1.9,1.65,-3.9],[7.0,2.9,.2],P.wood);for(let i=0;i<35;i++)box([-1.5+i*.2,1.65,-3.74],[.05,2.9,.09],P.brass);sign('CENTER',[-.5,1.8,-3.65],.70,P.ivory);
    for(const x of [-2.5,-.8,.9,2.6]){round([x,.71,4.5],[.35,1.0,1.25],P.metal);box([x,.91,4.5],[.07,.40,1.1],P.innerGlass);box([x,1.23,4.15],[.19,.025,.23],P.screen)}
    box([7,.20,2.3],[5.6,.024,6.3],P.carpet);sofa(7,4.3);sofa(7,.2,Math.PI);round([7,.53,2.2],[1.9,.18,1.0],P.wood);box([7,.32,2.2],[1.4,.3,.62],P.charcoal);plant(9.4,4.8,1.25);plant(4.5,-3.8,1.5);plant(-4.2,-.8,1.3);
    for(const z of [2,5]){cyl([-7,.84,z],[.82,.09,.82],P.wood);cyl([-7,.49,z],[.12,.62,.12],P.metal);chair(-8.2,z,Math.PI/2,P.soft);chair(-5.8,z,-Math.PI/2,P.soft)}
@@ -754,7 +754,7 @@ Twin.buildModel = function(){
   }
  }
  // Entrance canopy and glazing joint details belong to exterior only.
- set(-1,'exterior');round([0,4.05,9.0],[11.0,.20,4.1],P.ivory);box([0,4.18,9.0],[10.75,.025,3.82],P.glass);for(const x of [-5.2,5.2])box([x,2.42,10.8],[.13,3.4,.13],P.metal);sign('LAILIN',[-2.3,3.54,11.07],.78);
+ set(-1,'exterior');round([0,4.05,9.0],[11.0,.20,4.1],P.ivory);box([0,4.18,9.0],[10.75,.025,3.82],P.glass);for(const x of [-5.2,5.2])box([x,2.42,10.8],[.13,3.4,.13],P.metal);sign('CENTER',[-2.3,3.54,11.07],.78);
  box([0,3.932,9.0],[10.7,.04,3.88],P.wood);
  for(let j=0;j<27;j++)box([-5.15+j*.396,3.887,9.0],[.045,.050,3.76],P.brass);
  for(const z of [7.6,10.87])box([0,3.895,z],[10.45,.022,.044],P.warm);
@@ -774,7 +774,7 @@ Twin.buildModel = function(){
  for(const z of [1.3,6.25])bevel([6.61,3.052,z],[7.22,.16,.19],P.brass);
  for(let j=0;j<17;j++)box([3.05+j*.44,3.15,3.78],[.15,.15,5.2],P.ivory);
  at([0,.21,0],0,()=>{sofa(6.2,5.3);sofa(6.2,2.3,Math.PI);plant(9.4,5.3,1.0);plant(3.8,5.4);});round([6.2,.76,3.8],[1.5,.12,.75],P.wood);cyl([6.2,.54,3.8],[.34,.32,.34],P.dark);
- sign('LAILIN',[3.1,.65,7.55],.87);
+ sign('CENTER',[3.1,.65,7.55],.87);
 
  // Mechanical services: trunk duct, flanged insulated piping and roof anchors.
  for(const j of [0,1,2]){
@@ -841,7 +841,7 @@ Twin.createDevices=()=>Twin.floors.flatMap((f,fi)=>Object.entries(Twin.types).ma
  base:t.base+(type==='sensor'?fi*.12:type==='meter'?fi*1.2:0),index:fi*6+i
 })));
 Twin.Store=class {
- constructor(){this.devices=Twin.createDevices();this.orders=[];this.storageAvailable=true;this.simulationTick=0;this.key='lailin-building-twin:v1';this.restore()}
+ constructor(){this.devices=Twin.createDevices();this.orders=[];this.storageAvailable=true;this.simulationTick=0;this.key='building-twin:v1';this.restore()}
  restore(){try{const raw=localStorage.getItem(this.key);if(!raw)return;const data=JSON.parse(raw);if(data.version!==1)return;
   for(const saved of data.devices||[]){const d=this.devices.find(x=>x.id===saved.id);if(!d)continue;if(['normal','alert'].includes(saved.status))d.status=saved.status;if(typeof saved.online==='boolean')d.online=saved.online;d.alert=d.status==='alert'?(d.type==='smoke'?'烟雾浓度超出阈值':'回风温度持续偏高'):'';d.alertAt=typeof saved.alertAt==='string'&&/^\d{2}:\d{2}:\d{2}$/.test(saved.alertAt)?saved.alertAt:''}
   this.orders=(data.orders||[]).filter(o=>this.devices.some(d=>d.id===o.deviceId)&&/^WO-\d{3,6}$/.test(o.id)&&['processing','closed'].includes(o.status)).slice(0,200).map(o=>({id:o.id,deviceId:o.deviceId,status:o.status,createdAt:Number(o.createdAt)||Date.now(),closedAt:Number(o.closedAt)||null}));
@@ -968,7 +968,7 @@ function visible(b){if(b.detail&&state.mode==='overview'&&cam.span>30)return fal
 function offsets(b){if(b.floor<0)return [0,0,0];const off=offsetForFloor(b.floor);if(b.kind==='selection'&&state.selected){const d=store.get(state.selected);off[0]=d.position[0];off[2]=d.position[2]}return off}
 function toggleNight(){state.night=!state.night;document.body.classList.toggle('night',state.night);$('#night-toggle').classList.toggle('active',state.night);$('#night-toggle').setAttribute('aria-pressed',String(state.night));$('#night-toggle').innerHTML=icon(state.night?'moon':'sun')}
 function togglePresentation(){state.presentation=!state.presentation;document.body.classList.toggle('presentation',state.presentation);targetCamera();toast(state.presentation?'作品模式 · 按 P 恢复操作面板':'已恢复运维界面')}
-function makeScreenshot(){try{const out=document.createElement('canvas'),w=1920,h=Math.round(1920*canvas.height/canvas.width)+145;out.width=w;out.height=h;const c=out.getContext('2d');c.fillStyle=state.night?'#172b30':'#e8eeeb';c.fillRect(0,0,w,h);c.drawImage(canvas,0,89,w,h-145);c.fillStyle=state.night?'#d9e1d0':'#233f3a';c.font='500 27px "Segoe UI","Microsoft YaHei",sans-serif';c.fillText('LAILIN  /  来霖 · 智慧楼宇',45,52);c.font='16px "Segoe UI","Microsoft YaHei",sans-serif';c.textAlign='right';c.fillText(`${state.mode==='floor'?Twin.floors[state.floor].number+'F · '+Twin.floors[state.floor].name:state.mode==='explode'?'楼层拆解':'云庭中心 · A 座'}`,w-45,50);const s=store.stats();c.textAlign='left';c.font='14px "Segoe UI","Microsoft YaHei",sans-serif';c.fillStyle='#879782';c.fillText(`WebGL 2 · 实时三维场景     在线率 ${s.rate}%     能耗 1,248.6 kWh     告警 ${s.alarms}     工单 ${s.orders}`,45,h-23);c.textAlign='right';c.fillText('SIMULATED DATA / PORTFOLIO CASE',w-45,h-23);out.toBlob(blob=>{if(!blob)return toast('截图导出失败');const a=document.createElement('a'),url=URL.createObjectURL(blob);a.href=url;a.download=`LAILIN-${state.mode}${state.mode==='floor'?'-'+(state.floor+1)+'F':''}.png`;a.click();setTimeout(()=>URL.revokeObjectURL(url),5000);toast('已导出当前 3D 场景 PNG')},'image/png')}catch(e){toast('截图失败：'+e.message)}}
+function makeScreenshot(){try{const out=document.createElement('canvas'),w=1920,h=Math.round(1920*canvas.height/canvas.width)+145;out.width=w;out.height=h;const c=out.getContext('2d');c.fillStyle=state.night?'#172b30':'#e8eeeb';c.fillRect(0,0,w,h);c.drawImage(canvas,0,89,w,h-145);c.fillStyle=state.night?'#d9e1d0':'#233f3a';c.font='500 27px "Segoe UI","Microsoft YaHei",sans-serif';c.fillText('BUILDING TWIN  /  智慧楼宇数字孪生系统',45,52);c.font='16px "Segoe UI","Microsoft YaHei",sans-serif';c.textAlign='right';c.fillText(`${state.mode==='floor'?Twin.floors[state.floor].number+'F · '+Twin.floors[state.floor].name:state.mode==='explode'?'楼层拆解':'云庭中心 · A 座'}`,w-45,50);const s=store.stats();c.textAlign='left';c.font='14px "Segoe UI","Microsoft YaHei",sans-serif';c.fillStyle='#879782';c.fillText(`WebGL 2 · 实时三维场景     在线率 ${s.rate}%     能耗 1,248.6 kWh     告警 ${s.alarms}     工单 ${s.orders}`,45,h-23);c.textAlign='right';c.fillText('SIMULATED DATA / PORTFOLIO CASE',w-45,h-23);out.toBlob(blob=>{if(!blob)return toast('截图导出失败');const a=document.createElement('a'),url=URL.createObjectURL(blob);a.href=url;a.download=`building-twin-${state.mode}${state.mode==='floor'?'-'+(state.floor+1)+'F':''}.png`;a.click();setTimeout(()=>URL.revokeObjectURL(url),5000);toast('已导出当前 3D 场景 PNG')},'image/png')}catch(e){toast('截图失败：'+e.message)}}
 function onPanelClick(e){const el=e.target.closest('button');if(!el)return;
  if(el.dataset.device)return selectDevice(el.dataset.device);
  if(el.dataset.focus){const d=store.get(el.dataset.focus);targetCamera(d);toast('已聚焦设备，拖拽可查看周边空间');return}
