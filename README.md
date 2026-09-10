@@ -17,6 +17,20 @@
 - **多维度三维空间交互**：支持全局总览视角、楼层剖切拆解（Exploded View）、单层独立聚焦透视，以及基于真实三维坐标的设备拾取与工单联动。
 - **极端轻量与零依赖交付**：单个自包含 HTML 文件仅 **137 KB**，无需安装任何 npm 依赖，无需搭建本地服务器，双击即跑。
 
+## 界面与场景展示
+
+| 日间总览 · 鸟瞰全景 | 空间解构 · 楼层立体拆解 |
+| :---: | :---: |
+| ![日间总览](docs/assets/01-overview-day.png) | ![楼层立体拆解](docs/assets/02-exploded-view.png) |
+
+| 单层剖切 · 室内工位与设备 | 空间告警联动 · 3D 定位与工况 |
+| :---: | :---: |
+| ![单层剖切巡检](docs/assets/03-floor-inspect.png) | ![空间告警联动](docs/assets/04-device-alarm.png) |
+
+| 夜间深色模式 · 工业级暗调 | 天台特写 · 光伏与冷却系统 |
+| :---: | :---: |
+| ![夜间深色模式](docs/assets/05-night-mode.png) | ![天台特写](docs/assets/06-rooftop-solar.png) |
+
 ## 底层自研：纯原生 WebGL 架构与数学库 (`Twin`)
 
 本项目完全放弃使用 Three.js、Babylon.js 等通用重型引擎，所有图形与数学管线均基于 **WebGL 2 原生上下文**纯手写构建：
