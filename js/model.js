@@ -7,7 +7,8 @@ Twin.buildModel = function(){
  const lobbyGlass=material('#a9c4bd',.08,.1,0,3,.14);
  const P={
   stone:material('#d4cebf',.79,0,0,6),ivory:material('#eae6da',.46,0,0,6),edge:material('#b3bfba',.5,.35),dark:material('#334b4b',.5,.3),
-  glass:material('#366c70',.12,.1,0,3,.35),innerGlass:material('#a1b9b1',.12,.15,0,3,.15),spandrel:material('#203f43',.25,.55),
+  glass:material('#366c70',.12,.1,0,3,.35),innerGlass:material('#a1b9b1',.12,.15,0,3,.15),spandrel:material('#203f43',.25,.55),panel:material('#24464a',.34,.6,0,12),
+  carGlass:material('#1a2d31',.10,.55),rubber:material('#1c2326',.85,0,0,11),grate:material('#5f6d6b',.45,.6,0,14),
   metal:material('#8b9b9c',.28,.75,0,10),brass:material('#9c835e',.34,.72,0,10),wood:material('#987855',.56,0,0,2),white:material('#f3f1e8',.55),
   floor:material('#d6d5c9',.66,0,0,1),carpet:material('#97a39b',.98,0,0,11),carpetDark:material('#4f6b6c',.98,0,0,11),
   charcoal:material('#263b40',.65,.25),screen:material('#163c43',.22,.35,.12),led:material('#82d6b4',.25,0,1.1),warm:material('#f5db9d',.4,0,.5),
@@ -103,6 +104,8 @@ Twin.buildModel = function(){
   }
  }
  add('foliage',[0,h*.92,0],[.94,.92,.94],P.leaf2);
+ // Shaded inner clusters fill the crown so it reads as a volume, not a ring of balls.
+ for(let k=0;k<4;k++){const a=k*1.571+.4;add('foliage',[Math.cos(a)*.38,h*(.66+k*.045),Math.sin(a)*.38],[.78,.62,.78],P.leaf3,[0,a,0]);}
  // Three tree supports anchored in the planter, rather than floating above it.
  for(let j=0;j<3;j++){const a=j/3*6.283;pipe([Math.cos(a)*.48,0,Math.sin(a)*.48],[0,h*.34,0],.027,P.wood);}
  })}
@@ -131,7 +134,21 @@ Twin.buildModel = function(){
  at([4.55,.73,10.8],0,()=>{bevel([0,.8,0],[.35,1.6,.20],P.dark);box([0,1.08,.106],[.29,.37,.015],P.screen);box([0,.66,.11],[.25,.035,.01],P.brass);});
  // Cycle racks, charging points and two small vehicles.
  for(let i=0;i<4;i++){const x=17.8+i*.85;pipe([x,.4,10.6],[x,1.2,10.6],.04,P.metal);pipe([x,1.2,10.6],[x,1.2,11.4],.04,P.metal);pipe([x,1.2,11.4],[x,.4,11.4],.04,P.metal)}
- function car(x,z,ang,col){at([x,.38,z],ang,()=>{round([0,.50,0],[1.8,.55,3.8],col);round([0,.94,-.2],[1.55,.65,2.1],P.spandrel);round([0,1.23,-.2],[1.52,.08,1.7],col);for(const xx of [-.91,.91])for(const zz of [-1.11,1.1]){cyl([xx,.35,zz],[.32,.18,.32],P.black,[0,0,Math.PI/2]);cyl([xx*1.05,.35,zz],[.17,.025,.17],P.metal,[0,0,Math.PI/2])}for(const xx of [-.61,.61]){round([xx,.57,1.91],[.42,.13,.055],P.warm);round([xx,.57,-1.91],[.42,.12,.055],P.redLed)}box([0,.55,1.944],[.40,.11,.02],P.white)})}
+ function car(x,z,ang,col){at([x,.38,z],ang,()=>{
+  round([0,.47,0],[1.82,.44,3.9],col);round([0,.70,-.04],[1.76,.14,3.72],col);
+  round([0,.99,-.24],[1.56,.46,2.02],P.carGlass);round([0,1.245,-.30],[1.50,.07,1.56],col);
+  for(const xx of [-.765,.765]){box([xx,.99,-.25],[.05,.44,.11],col);box([xx,.99,-1.18],[.05,.40,.16],col);box([xx*1.24,.86,.58],[.15,.08,.11],col);
+   for(const zz of [.32,-.78])box([xx*1.19,.55,zz],[.012,.30,.012],P.dark);box([xx*1.195,.67,-.15],[.012,.028,.13],P.metal);}
+  for(const zz of [-1.96,1.96])round([0,.34,zz],[1.80,.21,.14],P.charcoal);box([0,.53,1.985],[.74,.11,.02],P.black);
+  for(const xx of [-.91,.91])for(const zz of [-1.18,1.16]){
+   box([xx*.995,.42,zz],[.05,.42,.82],P.black);cyl([xx,.34,zz],[.33,.21,.33],P.rubber,[0,0,Math.PI/2]);
+   cyl([xx*1.03,.34,zz],[.21,.20,.21],P.metal,[0,0,Math.PI/2]);cyl([xx*1.07,.34,zz],[.06,.02,.06],P.charcoal,[0,0,Math.PI/2]);
+  }
+  for(const xx of [-.61,.61]){round([xx,.57,1.93],[.42,.12,.07],P.warm);round([xx,.58,-1.93],[.42,.11,.07],P.redLed)}
+  box([0,.40,1.99],[.40,.10,.015],P.white);
+ })}
+ for(const [x,z] of [[-14,16.9],[7.5,17.6],[-21.6,-6],[-20.5,9.5]])cyl([x,.402,z],[.34,.016,.34],P.grate);
+ for(const x of [-16,-6.5,12.5,20.5])box([x,.401,13.85],[.62,.014,.26],P.grate);
  car(-21,-8,0,P.white);car(11,16.6,Math.PI/2,P.blue);car(-21,4,Math.PI,P.dark);
  for(const z of [-8,4]){round([-18.6,.43,z],[.62,.14,.60],P.stone);round([-18.6,1.04,z],[.48,1.12,.42],P.white);box([-18.6,1.3,z+.22],[.3,.35,.03],P.screen);box([-18.6,.67,z+.23],[.32,.12,.04],P.led)}
  function person(x,z,ang,col){at([x,.57,z],ang,()=>{for(const xx of [-.1,.1]){cyl([xx,.38,0],[.067,.71,.067],P.charcoal);round([xx,.07,.06],[.16,.12,.29],P.black)}round([0,.96,0],[.4,.53,.26],col);ball([0,1.42,0],[.15,.19,.15],P.wood);for(const xx of [-.27,.27])cyl([xx,.95,0],[.055,.54,.055],col,[0,0,xx>0?.15:-.15])})}
@@ -345,10 +362,10 @@ Twin.buildModel = function(){
   kind='shell';
   const pane=f===0?lobbyGlass:P.glass;
   // Stone-clad corner piers run the full storey height and close the glazing grid at each corner.
-  for(const x of [-11.02,11.02])for(const z of [-7.58,7.58]){box([x,1.85,z],[.72,3.7,.72],P.stone);box([x,3.47,z],[.78,.22,.78],P.ivory);}
+  for(const x of [-11.02,11.02])for(const z of [-7.58,7.58]){box([x,1.85,z],[.72,3.7,.72],P.stone);box([x,3.47,z],[.78,.22,.78],P.ivory);for(const y of [1.2,2.4])box([x,y,z],[.734,.022,.734],P.edge);}
   for(const z of [-7.61,7.61]){
    const side=Math.sign(z);
-   box([0,.43,z],[22,.43,.105],P.spandrel);
+   box([0,.43,z],[22,.43,.105],P.panel);
    bevel([0,3.47,z+side*.065],[22.38,.215,.39],P.ivory);
    box([0,3.32,z+side*.112],[22.23,.036,.31],P.dark);
    box([0,3.405,z+side*.268],[22.40,.022,.030],P.brass);
@@ -366,13 +383,13 @@ Twin.buildModel = function(){
    }
    for(let i=0;i<=11;i++){
     const x=-11+i*2;
-    bevel([x,1.92,z+side*.30],[.11,3.38,.44],i%2?P.brass:P.ivory);
+    bevel([x,1.92,z+side*.30],[.11,3.38,.44],i%2?P.brass:P.ivory);for(const y of [.225,3.615])box([x,y,z+side*.30],[.15,.03,.47],P.metal);
     for(const y of [.80,3.05])box([x,y,z+side*.18],[.16,.045,.26],P.metal);
    }
   }
   for(const x of [-11.06,11.06]){
    const side=Math.sign(x);
-   box([x,.43,0],[.105,.43,15.2],P.spandrel);
+   box([x,.43,0],[.105,.43,15.2],P.panel);
    bevel([x+side*.06,3.47,0],[.39,.215,15.3],P.ivory);
    box([x+side*.11,3.32,0],[.31,.036,15.17],P.dark);
    box([x+side*.268,3.405,0],[.03,.022,15.35],P.brass);
@@ -382,7 +399,7 @@ Twin.buildModel = function(){
     box([x,1.97,z],[.027,2.65,1.835],pane);
     box([x+side*.045,1.88,z-.95],[.12,3.47,.052],P.dark);
     box([x+side*.034,2.68,z],[.065,.035,1.86],P.metal);
-    bevel([x+side*.25,1.92,z-.95],[.38,3.38,.11],P.brass);
+    bevel([x+side*.25,1.92,z-.95],[.38,3.38,.11],P.brass);for(const y of [.225,3.615])box([x+side*.25,y,z-.95],[.41,.03,.15],P.metal);
    }
   }
  }
@@ -395,6 +412,9 @@ Twin.buildModel = function(){
  box([0,3.55,8.60],[4.46,.13,.11],P.dark);
  for(const x of [-1.1,1.1]){box([x,2.18,8.6],[2.12,2.57,.033],P.innerGlass);box([x,2.18,8.64],[.032,2.5,.043],P.metal);pipe([x*.18,1.64,8.67],[x*.18,2.25,8.67],.019,P.brass);}
  box([0,.888,8.20],[4.20,.018,1.17],P.carpetDark);
+ // Canopy steelwork: side fascias and four tie-rods hung from facade brackets.
+ for(const x of [-5.52,5.52])box([x,4.05,9.0],[.06,.27,4.12],P.metal);
+ for(const x of [-4.2,-1.4,1.4,4.2]){pipe([x,7.35,8.08],[x,4.2,10.82],.022,P.metal);box([x,7.35,7.98],[.16,.22,.12],P.dark);box([x,4.19,10.82],[.12,.06,.16],P.dark);}
 
  // Roof: photovoltaic field, chillers, maintenance paths and landscaped terrace.
  set(6,'roof',23.11);box([0,0,0],[22.6,.34,15.6],P.ivory);box([0,.20,0],[21.9,.055,14.9],P.floor);
@@ -409,7 +429,7 @@ Twin.buildModel = function(){
   for(let j=0;j<8;j++)box(at2(mid,.42+j*.19),alongX?[len,.028,.20]:[.20,.028,len],P.metal,alongX?[.55,0,0]:[0,0,.55]);};
  screenSide(-4.1,8.9,-2.2,true);screenSide(-7.25,-2.2,8.9,false);screenSide(-7.25,-2.2,-4.1,false);
  box([-8.0,1.26,-4.5],[5.8,2.1,5.2],P.ivory);bevel([-8.0,2.37,-4.5],[5.97,.12,5.35],P.dark);for(let j=0;j<24;j++)box([-9.99+j*.217,1.25,-1.865],[.07,1.95,.09],P.brass);
- for(let j=0;j<3;j++)at([-.9+j*3.5,.24,-3.8],0,()=>{round([0,.53,0],[2.7,.90,2.4],P.metal);box([0,.08,0],[2.85,.16,2.55],P.charcoal);for(const x of [-.70,.70]){cyl([x,1.01,0],[.54,.09,.54],P.charcoal);for(const s of [.9,.64,.36])add('torus',[x,1.07,0],[s,1,s],P.metal);for(let k=0;k<5;k++)box([x,1.056,0],[.88,.018,.045],P.edge,[0,k/5*Math.PI,0]);cyl([x,1.09,0],[.11,.05,.11],P.metal)}for(let k=0;k<9;k++)box([0,.2+k*.078,1.22],[2.49,.022,.032],P.dark);pipe([0,.42,-1.25],[0,.42,-2.2],.09,P.blue)});
+ for(let j=0;j<3;j++)at([-.9+j*3.5,.24,-3.8],0,()=>{round([0,.53,0],[2.7,.90,2.4],P.metal);box([0,.08,0],[2.85,.16,2.55],P.charcoal);for(const x of [-.70,.70]){cyl([x,1.01,0],[.54,.09,.54],P.charcoal);for(const s of [.9,.64,.36])add('torus',[x,1.07,0],[s,1,s],P.metal);for(let k=0;k<5;k++)box([x,1.056,0],[.88,.018,.045],P.edge,[0,k/5*Math.PI,0]);cyl([x,1.09,0],[.11,.05,.11],P.metal)}for(let k=0;k<9;k++){box([0,.2+k*.078,1.22],[2.49,.022,.032],P.dark);for(const xx of [-1.36,1.36])box([xx,.2+k*.078,0],[.032,.022,2.18],P.dark);}for(const xx of [-1.3,1.3])for(const zz of [-1.16,1.16])box([xx,.53,zz],[.09,.92,.09],P.charcoal);pipe([0,.42,-1.25],[0,.42,-2.2],.09,P.blue)});
  for(let i=0;i<3;i++)for(let j=0;j<3;j++)at([-8.7+i*2.7,.27,1.0+j*1.7],0,()=>{box([0,.24,0],[2.48,.06,1.52],P.metal,[-.18,0,0]);box([0,.283,0],[2.38,.016,1.44],P.solar,[-.18,0,0]);for(const z of [-.55,.55]){const h=.24+Math.sin(.18)*z-.03;box([0,(h-.04)/2,z],[2.30,h+.04,.045],P.metal);box([0,-.02,z],[2.34,.04,.22],P.dark)}});
  box([6.6,.31,3.8],[7.5,.14,5.4],P.wood);for(let j=0;j<25;j++)box([3.0+j*.3,.39,3.8],[.018,.008,5.3],P.brass);
  for(const x of [3.1,10.1])for(const z of [1.3,6.25])box([x,1.76,z],[.10,2.8,.10],P.brass);
@@ -446,6 +466,7 @@ Twin.buildModel = function(){
  }
  box([6.58,1.17,6.45],[7.62,1.35,.028],P.innerGlass);pipe([2.74,1.89,6.45],[10.42,1.89,6.45],.025,P.brass);for(const x of [2.74,5.30,7.86,10.42])box([x,1.145,6.45],[.04,1.50,.04],P.brass);
  for(const x of [-10.7,10.7])for(const z of [-7.15,7.15]){box([x,.25,z],[.21,.02,.21],P.dark);for(let k=0;k<5;k++)box([x-.08+k*.04,.263,z],[.012,.006,.18],P.metal);}
+ for(let i=0;i<13;i++)box([-6.6+i*.75,.245,-1.25],[.62,.035,.62],P.stone);
  // Roof access door, ventilator and its framing.
  box([-7.5,1.24,-1.78],[1.18,1.89,.13],P.dark);box([-7.5,1.23,-1.702],[1.02,1.78,.025],P.metal);box([-7.1,1.2,-1.676],[.028,.19,.025],P.brass);
  for(const x of [-8.7,-6.3]){cyl([x,2.66,-3.65],[.21,.44,.21],P.metal);cyl([x,2.90,-3.65],[.30,.055,.30],P.edge);}
